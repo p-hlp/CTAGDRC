@@ -41,8 +41,8 @@ The project was mostly used to further my understanding and knowledge of digital
 - Auto Makeup
 - Mix
 - LookAHead
-- Gainreduction/Input/Output Metering
-
+- Metering (Input/Output/Gainreduction)
+ 
 ## Manual
 #### General
 - **Input:** The Input knob adjusts the level of the signal before any processing happens. Driving the input signal harder into the compressor can be used as an alternative to lowering the threshold.
@@ -53,7 +53,7 @@ The project was mostly used to further my understanding and knowledge of digital
 #### The Gain-Computer
 - **Threshold:** The Threshold knob adjusts the level above which the compressor starts attenuating the input signal. The Input knob alternatively can be used to drive the signal harder into the compressor, resulting in a less low threshold being needed. Be careful to not drive the signal too hard or it'll start clipping.
 - **Ratio:** The Ratio knob determines how much the signal is attenuated above the chosen threshold. For a ratio of 4:1, one dB remains for every 4dB of input signal above the threshold. At a ratio of 1:1 no compression is happening, as the input is exactly the output. At a ratio of inifinity:1 (knob all the way to the right) the compressor is acting as a limiter, meaning that everything above the treshold is completely compressed away.
-- **Knee:** The Knee knob is used to achieve a rounder compression curve. Having a "hard" knee (knob all the way to the left) means that the compressor will only start working if the input signal is above the threshold and will stop working immediately when it is below. Using a "soft" knee on the other hand will define a range (knee/2) above and under the threshold, where the compressor will slowly start or stop compressing, resulting in a more gradual and transparent compression.
+- **Knee:** The Knee knob is used to achieve a rounder compression curve. Having a *hard knee* (knob all the way to the left) means that the compressor will only start working if the input signal is above the threshold and will stop working immediately when it is below. Using a *soft knee* on the other hand will define a range *(knee/2)* above and under the threshold, where the compressor will slowly start or stop compressing, resulting in a more gradual and transparent compression.
 
 #### The Ballistics/Time-Constants
 - **Attack:** The Attack knob sets the time that determines how fast the compression will set in once the signal exceeds the threshold. Generally speaking you want a rather fast attack time for transient-rich signals like drums to minimize overshoot. 
@@ -65,7 +65,7 @@ The project was mostly used to further my understanding and knowledge of digital
 
 #### Metering
 - **Gainreduction:** This is a simple gainreduction meter. Right-most indicator is 0dB gainreduction and therefore no compression. The left-most indicator is -30dB, middle indicator -15dB. 
-- **Input/Output:** The Input/Output meter is a "VU-Style" peak meter. Right-most indicator 0dB. Left-most indicator -50dB.
+- **Input/Output:** The Input/Output meter is a "VU-Style" peak meter. Right-most indicator 0dBFS. Left-most indicator -50dBFS.
 
 
 ## Technical
@@ -94,7 +94,7 @@ A basic compressor diagram:
 Lets take a look at the components.
 
 #### Level Detection
-Two approaches - peak detection which is based on the absolute value of the signal and rms detection which is based on the square of the signal.
+Two approaches - *peak detection* which is based on the absolute value of the signal and *rms detection* which is based on the square of the signal.
 Both are easily implemented in the digital domain, but rms detection introduces a significant delay, therefore peak detection was the choice for this implementation.
 
 In C++ this is as simple as doing:
@@ -108,11 +108,11 @@ Converting from linear to log (decibel):
 
 `float log = 20 * std::log10 (gain)`
 
-and
+and converting from log. to linear:
 
 `float lin = std::pow (10.0, decibels * 0.05)`
 
-In this implementation the gain computer as well as the ballistics are done in the log. domain.
+In this implementation the gain computer as well as the ballistics are operating in the log. domain.
 
 #### Gain Computer
 
@@ -122,7 +122,7 @@ A typical compression curve looks like:
 
 ![alt text](Documentation/compression-curve.png "compression curve")
 
-The Treshold, Ratio and Knee parameters define the input/output characteristics of the compressor. 
+The *Treshold*, *Ratio* and *Knee* parameters define the input/output characteristics of the compressor. 
 
 If we ignore the knee parameter for now, the compressor starts to attenuate the signal according to the ratio once it exceeds the threshold. 
 
@@ -132,15 +132,15 @@ Resulting in:
 
 ![alt text](Documentation/hard_knee.png "hard knee")
 
-With xG being the input, yG the output, T the threshold and R the ratio.
+With *xG* being the input, *yG* the output, *T* the threshold and *R* the ratio.
 
 In order to soften the compression we can smooth the transition between no compression and compression. This is called *soft knee*. The knee knob adjusts the dB-range which is equally distributed on both sides of the threshold. 
 
-To implement this we can replace the equation above with a second order interpolation function [[2]]:
+To implement this we can replace the equation above with a second order interpolation function [[1]]:
 
 ![alt text](Documentation/soft_knee.png "soft knee")
 
-With W being the knee-width and (xG - T) being the overshoot. When W = 0dB this function is identical to the hard knee.
+With *W* being the knee-width and *(xG - T)* being the overshoot. When *W* is set to 0dB this function is identical to the *hard knee*.
 
 A simplified implementation:
 
@@ -158,7 +158,7 @@ A simplified implementation:
         return slope * overshoot;
     }
 
-This function returns the calculated attenuations which are then being fed into the smoothing filter aka. peak detector.
+This function returns the calculated attenuations which are then being fed into the smoothing filter aka. *peak detector*.
 
 #### Ballistics
 The time constants are another component that differs alot from compressor to compressor. The attack is usually defined as the time it takes for the compressor to attenuate the signal once the signal exceeds the threshold. Likewise release is defined as the time it takes for the compressor to recover once the signal falls under the threshold.
@@ -167,7 +167,7 @@ In a digital implementation the attack and release times are usually introduced 
 
 ![alt text](Documentation/filter.png "filter")
 
-Where r[n] is the input, s[n] the output and alpha the filter coefficient. With the step response:
+Where *r[n]* is the input, *s[n]* the output and *alpha* the filter coefficient. With the step response:
 
 ![alt text](Documentation/filter-stepresponse.png "filter stepresponse")
 
@@ -177,7 +177,7 @@ The attack/release coefficients are then calculated as follows:
 
 This is true when the rise time of the step response is considered to go from 0% to 63% or 1 - 1/e of the final value.
 Meaning, tauAttack starts at 0 and goes to 1. Therefore attack time is the time it takes for the level to reach 0.63.
-TauRelease starts at 1 and goes to 0. The release time is the time it takes for the evel to reach 1-0.63 = 0.37.
+TauRelease starts at 1 and goes to 0. The release time is the time it takes for the level to reach 1-0.63 = 0.37.
 [[2]]
 
 Someone else might consider the rise time of the step response to go from 10% to 90% of the final value or define it as time to change level by so many dBs.
@@ -233,11 +233,11 @@ The attack and release times can be automated using the crest factor of the inpu
 
 ![alt text](Documentation/crest-factor.PNG "Crest Factor")
 
-This method is a useful short term signal measure to determine the nature of a signal. For a steady state signal the RMS value will be close to the peak value, therefore the crest factor will be relatively small. 
+This method is a useful short term signal measure to determine the nature of a signal. For a *steady-state* signal the rms value will be close to the peak value, therefore the crest factor will be relatively small. 
 
-The ideal time frame for the measurement was informally evaluated in [[4]] and chosen to be 200ms. 
+The ideal time frame for the measurement was informally evaluated in [[4]] and chosen to be 200ms. Choosing the same time frame for both the peak and the rms detector ensures that the rms value will always be smaller than the peak value.
 
-Since most transients in a signal are a burst of high amplitude over a short duration (typically < 10ms) the contribution to the RMS value is relatively small in comparison to the peak value. This means the crest factor will be high for "transient-rich" signals and small for steady state signals.
+Since most transients in a signal are a burst of high amplitude over a short duration (typically < 10ms) the contribution to the rms value is relatively small in comparison to the peak value. This means, the crest factor will be high for *transient-rich* signals and small for *steady-state* signals.
 
 As shown in [[4]] we can combine a peak and rms detector as follows:
 
@@ -279,7 +279,7 @@ Implemented in C++ this could look like:
     }
 
 ##### Automating the makeup gain
-The makeup gain automation in this implementation is not ideal. It is based on the calculated attenuations smoothed over a long time frame, then added back to the compressed signal to achieve  ouput-volume that is closer to the perceived loudness of the input signal. Since added makeup gain is a smoothed over a time frame, it is still time-varying and therefore changes the gain over time. This should rather be an approximation to get closer to the perceived loudness of the input signal, thus a static gain increase.
+The makeup gain automation in this implementation is not ideal. It is based on the calculated attenuations smoothed over a long time frame, then added back to the compressed signal to achieve ouput volume that is closer to the perceived loudness of the input signal. Since added makeup gain is a smoothed over a time frame, it is still time-varying and therefore changes the gain over time. This should rather be an approximation to get closer to the perceived loudness of the input signal, thus a static gain increase.
 
 In [[4]] aswell as in [[3]] ideas are discussed on how to tackle this problem.
 

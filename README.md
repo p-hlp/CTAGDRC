@@ -11,17 +11,17 @@
 - [Features](#features)
 - [Manual](#manual)
     - [General](#general)
-    - [The Gain-Computer](#the-gain-computer)
-    - [The Ballistics/Time-Constants](#the-ballisticstime-constants)
-    - [Parameter-Automation](#parameter-automation)
+    - [Gain Computer](#gain-computer)
+    - [Ballistics](#ballistics)
+    - [Parameter Automation](#parameter-automation)
     - [Metering](#metering)
 - [Technical](#technical)
   - [Design Approach](#design-approach)
   - [Overview](#overview)
     - [Level Detection](#level-detection)
     - [Log and Lin Conversion](#log-and-lin-conversion)
-    - [Gain Computer](#gain-computer)
-    - [Ballistics](#ballistics)
+    - [Gain Computer](#gain-computer-1)
+    - [Ballistics](#ballistics-1)
     - [Parameter Automation](#parameter-automation-1)
       - [Automating the time constants](#automating-the-time-constants)
       - [Automating the makeup gain](#automating-the-makeup-gain)
@@ -50,16 +50,16 @@ The project was mostly used to further my understanding and knowledge of digital
 - **Mix:** The Mix knob enables you to mix between the dry and processed signal. This can be used for parallel processing and enables use-cases like NY-Style drum compression. 
 - **LookAhead:** The LookAhead button enables the LookAhead-Mode. If the compressor is used as a limiter (Ratio infinity:1 & instant attack time) it will anticipate the incoming peaks and fade in the aggressive gain reductions, thus preventing distortion from happening.
   
-#### The Gain-Computer
+#### Gain Computer
 - **Threshold:** The Threshold knob adjusts the level above which the compressor starts attenuating the input signal. The Input knob alternatively can be used to drive the signal harder into the compressor, resulting in a less low threshold being needed. Be careful to not drive the signal too hard or it'll start clipping.
 - **Ratio:** The Ratio knob determines how much the signal is attenuated above the chosen threshold. For a ratio of 4:1, one dB remains for every 4dB of input signal above the threshold. At a ratio of 1:1 no compression is happening, as the input is exactly the output. At a ratio of inifinity:1 (knob all the way to the right) the compressor is acting as a limiter, meaning that everything above the treshold is completely compressed away.
 - **Knee:** The Knee knob is used to achieve a rounder compression curve. Having a *hard knee* (knob all the way to the left) means that the compressor will only start working if the input signal is above the threshold and will stop working immediately when it is below. Using a *soft knee* on the other hand will define a range *(knee/2)* above and under the threshold, where the compressor will slowly start or stop compressing, resulting in a more gradual and transparent compression.
 
-#### The Ballistics/Time-Constants
+#### Ballistics
 - **Attack:** The Attack knob sets the time that determines how fast the compression will set in once the signal exceeds the threshold. Generally speaking you want a rather fast attack time for transient-rich signals like drums to minimize overshoot. 
 - **Release:** The Release knob sets the time that determines how fast the compressor will recover from the gain reduction once the signal falls under the threshold. Depending on the input signal, short release times may introduce a "pumping" effect and/or distortion.
   
-#### Parameter-Automation
+#### Parameter Automation
 - **Auto Makeup:** The AutoMakeup button enables automatic makeup gain. Based on the average attentuations applied to the input signal. This features tries to keep the input signal and the processed output signal as close as possible in perceived loudness. This is a time-varying effect and may introduce unwanted volume changes to the output signal.
 - **Auto Attack & Auto Release:** The AutoAttack and AutoRelease buttons enable/disable the automation of the time constants. Based on the ratio of peak and rms level of the input signal the compressor can make assumptions about the "transient-richness" of the signal and automate the ballistics accordingly.
 
@@ -281,7 +281,7 @@ Implemented in C++ this could look like:
 ##### Automating the makeup gain
 The makeup gain automation in this implementation is not ideal. It is based on the calculated attenuations smoothed over a long time frame, then added back to the compressed signal to achieve ouput volume that is closer to the perceived loudness of the input signal. Since added makeup gain is a smoothed over a time frame, it is still time-varying and therefore changes the gain over time. This should rather be an approximation to get closer to the perceived loudness of the input signal, thus a static gain increase.
 
-In [[4]] aswell as in [[3]] ideas are discussed on how to tackle this problem.
+In [[3]] aswell as in [[4]] ideas are discussed on how to tackle this problem.
 
 
 #### LookAhead
@@ -290,7 +290,6 @@ LookAhead is mostly used in limiters, meaning, compressors with a ratio of infin
 It is used to lower/prevent distortion that occurs when the gain reduction happens too fast. This might be very noticeable when the signal has low frequency content and the attack time is faster than a single cycle of the waveform.
 
 Most books and articles on the internet implement this feature by simply delaying the input signal. This means that the calculated attenuations will affect the signal a chosen time (mostly 5ms-15ms) before the transient will effectively hit the compressor. 
-
 So - what will happen if an incoming peak is shorter than the chosen time? 
 
 The limiter will most likely miss it and even if the release time is considerably long the peak won't be attenuated by the correct amount.
@@ -308,7 +307,7 @@ Fading in the aggressive gain reductions:
 
 ![alt text](Documentation/new_lookahead.png "FadeIn Lookahead")
 
-Its quite visible that in the first figure the peak isn't completely attenuated and the gain reduction kicks in abruptly. This will result in an audible click and distortion.
+It's quite visible that in the first figure the peak isn't completely attenuated and the gain reduction kicks in abruptly. This will result in an audible click and distortion.
 
 In the second figure the gain reduction is faded in slowly, thus preventing any of the unwanted effects.
 

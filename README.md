@@ -3,7 +3,7 @@
 <!-- omit in toc -->
 ## A VST3/AU Compressor Plugin created with [JUCE](https://juce.com/)
 
-![alt text](Documentation/CTAGDRC_Snap.png "UI Capture")
+![alt text](Documentation/CTAGDRC_Snap.png "UI Capture" | width=75)
 
 <!-- omit in toc -->
 ## Contents

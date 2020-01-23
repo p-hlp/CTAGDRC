@@ -231,7 +231,7 @@ The sidechain configuration including components for parameter automation and lo
 ##### Automating the time constants
 The attack and release times can be automated using the crest factor of the input signal. The crest factor is defined as the ratio of peak signal level to root means squared (rms) signal level over a given duration.
 
-![alt text](Documentation/crest-factor.PNG "Crest Factor")
+![alt text](Documentation/crest-factor.png "Crest Factor")
 
 This method is a useful short term signal measure to determine the nature of a signal. For a *steady-state* signal the rms value will be close to the peak value, therefore the crest factor will be relatively small. 
 

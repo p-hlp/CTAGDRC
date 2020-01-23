@@ -41,7 +41,7 @@ The project was mostly used to further my understanding and knowledge of digital
 - Auto Makeup
 - Mix
 - LookAHead
-- Metering (Input/Output/Gainreduction)
+- Metering (Input/Output/Gain Reduction)
  
 ## Manual
 #### General

@@ -160,7 +160,6 @@ void Compressor::process(AudioBuffer<float>& buffer)
         // Do lookahead if enabled
         if (lookaheadEnabled)
         {
-            DBG("Lookahead enabled");
             // Delay input buffer
             delay.process(buffer);
 

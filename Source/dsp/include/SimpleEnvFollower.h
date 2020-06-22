@@ -70,7 +70,6 @@ public:
                 else if (currMaxPeak > 0.001f)
                     currMaxPeak *= peakDecay;
                 else currMaxPeak = 0.0f;
-                //DBG("Current Maxpeak: " << currMaxPeak);
             }
         }
     }

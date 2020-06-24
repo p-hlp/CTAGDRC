@@ -106,19 +106,7 @@ void CtagdrcAudioProcessorEditor::buttonClicked(Button* b)
 {
     if (b == &autoAttackButton)attackLSlider.setEnabled(!attackLSlider.isEnabled());
     if (b == &autoReleaseButton)releaseLSlider.setEnabled(!releaseLSlider.isEnabled());
-    if (b == &powerButton)
-    {
-        inGainLSlider.setEnabled(!inGainLSlider.isEnabled());
-        treshLSlider.setEnabled(!treshLSlider.isEnabled());
-        ratioLSlider.setEnabled(!ratioLSlider.isEnabled());
-        kneeLSlider.setEnabled(!kneeLSlider.isEnabled());
-        makeupGainLSlider.setEnabled(!makeupGainLSlider.isEnabled());
-        attackLSlider.setEnabled(!attackLSlider.isEnabled());
-        releaseLSlider.setEnabled(!releaseLSlider.isEnabled());
-        mixLSlider.setEnabled(!mixLSlider.isEnabled());
-        meter.setEnabled(!meter.isEnabled());
-        meter.setGUIEnabled(meter.isEnabled());
-    }
+    if (b == &powerButton) setGUIState(powerButton.getToggleState());
 }
 
 void CtagdrcAudioProcessorEditor::timerCallback()
@@ -219,4 +207,32 @@ void CtagdrcAudioProcessorEditor::initWidgets()
 
     addAndMakeVisible(meter);
     meter.setMode(Meter::Mode::GR);
+}
+
+void CtagdrcAudioProcessorEditor::setGUIState(bool powerState)
+{
+    inGainLSlider.setEnabled(powerState);
+    treshLSlider.setEnabled(powerState);
+    ratioLSlider.setEnabled(powerState);
+    kneeLSlider.setEnabled(powerState);
+    makeupGainLSlider.setEnabled(powerState);
+    mixLSlider.setEnabled(powerState);
+    meter.setEnabled(powerState);
+    meter.setGUIEnabled(powerState);
+    lahButton.setEnabled(powerState);
+    autoMakeupButton.setEnabled(powerState);
+
+    autoAttackButton.setEnabled(powerState);
+    autoReleaseButton.setEnabled(powerState);
+
+    if (!powerState)
+    {
+        attackLSlider.setEnabled(powerState);
+        releaseLSlider.setEnabled(powerState);
+    }
+    else
+    {
+        attackLSlider.setEnabled(!autoAttackButton.getToggleState());
+        releaseLSlider.setEnabled(!autoReleaseButton.getToggleState());
+    }
 }

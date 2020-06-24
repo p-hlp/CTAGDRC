@@ -47,9 +47,9 @@
                 file="Source/dsp/include/EnvelopeFollower.h"/>
           <FILE id="shtlRi" name="GainComputer.h" compile="0" resource="0" file="Source/dsp/include/GainComputer.h"/>
           <FILE id="oz507B" name="LevelDetector.h" compile="0" resource="0" file="Source/dsp/include/LevelDetector.h"/>
+          <FILE id="AA2rC3" name="LevelEnvelopeFollower.h" compile="0" resource="0"
+                file="Source/dsp/include/LevelEnvelopeFollower.h"/>
           <FILE id="zOElNy" name="LookAhead.h" compile="0" resource="0" file="Source/dsp/include/LookAhead.h"/>
-          <FILE id="z1MnNc" name="SimpleEnvFollower.h" compile="0" resource="0"
-                file="Source/dsp/include/SimpleEnvFollower.h"/>
           <FILE id="tMa8eJ" name="SmoothingFilter.h" compile="0" resource="0"
                 file="Source/dsp/include/SmoothingFilter.h"/>
         </GROUP>
@@ -62,6 +62,8 @@
               file="Source/dsp/GainComputer.cpp"/>
         <FILE id="NkvjrV" name="LevelDetector.cpp" compile="1" resource="0"
               file="Source/dsp/LevelDetector.cpp"/>
+        <FILE id="P8Tp1y" name="LevelEnvelopeFollower.cpp" compile="1" resource="0"
+              file="Source/dsp/LevelEnvelopeFollower.cpp"/>
         <FILE id="gqZjVs" name="LookAhead.cpp" compile="1" resource="0" file="Source/dsp/LookAhead.cpp"/>
         <FILE id="tKrcZ0" name="SmoothingFilter.cpp" compile="1" resource="0"
               file="Source/dsp/SmoothingFilter.cpp"/>

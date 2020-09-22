@@ -1,7 +1,7 @@
 <!-- omit in toc -->
 # CTAG Dynamic Range Compressor
 <!-- omit in toc -->
-## A VST3/AU Audio Compressor Plugin created with [JUCE](https://juce.com/)
+## An audio compressor plugin created with [JUCE](https://juce.com/)
 
 <img src="Documentation/CTAGDRC_Snap.png" width="70%">
 

@@ -30,7 +30,7 @@
  
 ## Introduction
 This is a simple vst3/au compressor plugin that was build with the goal in mind to create a good sounding compressor for a wide variety of signals and applications. The GUI is kept minimalistic to improve usability and not clutter the screen.
-The project was mostly used to further my understanding and knowledge of digital signal processing and digital audio effects.[A demonstration is available on YouTube.](https://www.youtube.com/watch?v=ZFKPXIpGRq8)
+The project was mostly used to further my understanding and knowledge of digital signal processing and digital audio effects. [A demonstration is available on YouTube.](https://www.youtube.com/watch?v=ZFKPXIpGRq8)
 
 ## Features
 - Input Gain

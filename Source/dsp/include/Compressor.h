@@ -28,8 +28,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * by Giannoulis, Massberg & Reiss
  */
 
-using namespace dsp;
-
 class Compressor
 {
 public:
@@ -38,7 +36,7 @@ public:
     ~Compressor();
 
     // Prepares compressor with a ProcessSpec-Object containing samplerate, blocksize and number of channels
-    void prepare(const ProcessSpec& ps);
+    void prepare(const dsp::ProcessSpec& ps);
 
     // Sets compressor to bypassed/not bypassed
     void setPower(bool);
@@ -95,7 +93,7 @@ private:
     inline float calculateAutoMakeup(const float*, int numSamples);
 
     //Directly initialize process spec to avoid debugging problems
-    ProcessSpec procSpec{-1, 0, 0};
+    dsp::ProcessSpec procSpec{-1, 0, 0};
 
     AudioBuffer<float> originalSignal;
     std::vector<float> sidechainSignal;

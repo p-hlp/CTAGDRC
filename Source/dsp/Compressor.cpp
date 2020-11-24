@@ -25,7 +25,7 @@ Compressor::~Compressor()
     rawSidechainSignal = nullptr;
 }
 
-void Compressor::prepare(const ProcessSpec& ps)
+void Compressor::prepare(const dsp::ProcessSpec& ps)
 {
     procSpec = ps;
     ballistics.prepare(ps.sampleRate);
